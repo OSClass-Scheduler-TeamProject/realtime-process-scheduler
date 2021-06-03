@@ -39,7 +39,7 @@ void execute_scheduler(Process *processes, Queue_Node *job_queue, int no_of_proc
 
         // 큐 내부 모든 작업에 대해 Deadline이 더 빠른 작업이 있는지 확인
         for(int i=0; i<no_of_process_in_queue; i++){
-            if(job_queue[i].process_id != -1 && (job_queue[i].deadline_time - current_time) < shortest_deadline && job_queue[i].deadline_time - current_time > 0){
+            if(job_queue[i].process_id != -1 && (job_queue[i].deadline_time - current_time) < shortest_deadline && job_queue[i].deadline_time - current_time > 0 && job_queue[i].remained_time > 0){
                 which_process_to_run = i;
                 which_pid_to_run = job_queue[i].process_id;
                 shortest_deadline = job_queue[i].deadline_time - current_time;
@@ -54,7 +54,7 @@ void execute_scheduler(Process *processes, Queue_Node *job_queue, int no_of_proc
         // 종료된 프로세스라면 CPU를 IDLE 상태로 변경
         if(job_queue[which_process_to_run].remained_time == 0){
             job_queue[which_process_to_run].process_id = -1;
-            which_process_to_run = -1;
+            which_pid_to_run = -1;
             shortest_deadline = 999999999;
             remained_process--;
         }
