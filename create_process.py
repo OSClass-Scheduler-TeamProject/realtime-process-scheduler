@@ -1,7 +1,7 @@
 import random
 
-max_process = 100
-max_set_size = 10
+max_process = 40
+max_set_size = 20
 no_process = 0
 
 process_list = []
@@ -9,7 +9,7 @@ insert_time = 1
 set_start_time = 1
 
 while no_process < max_process:
-    set_size = random.randint(1, min(max_set_size, 100 - no_process))
+    set_size = random.randint(1, min(max_set_size, max_process - no_process))
     set_burst_time = 0
     process_set = []
     insert_time = set_start_time
