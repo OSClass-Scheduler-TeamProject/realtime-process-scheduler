@@ -49,7 +49,8 @@ void execute_scheduler(Process *processes, Queue_Node *job_queue, int no_of_proc
 
         // 특정 시점에 대해 실행중인 프로세스에 대해 남은 시간 감소
         job_queue[which_process_to_run].remained_time--;
-        printf("현재 시간:%d 실행프로세스:%d 큐 내부 작업:%d\n", current_time, which_pid_to_run, remained_process);
+        // printf("현재 시간:%d 실행프로세스:%d 큐 내부 작업:%d\n", current_time, which_pid_to_run, remained_process);
+        printf("%d, %d\n", current_time, which_pid_to_run);
         // 종료된 프로세스라면 CPU를 IDLE 상태로 변경
         if(job_queue[which_process_to_run].remained_time == 0){
             job_queue[which_process_to_run].process_id = -1;
