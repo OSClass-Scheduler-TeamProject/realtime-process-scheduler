@@ -37,6 +37,11 @@ void execute_scheduler(Process *processes, Queue_Node *job_queue, int no_of_proc
         // 해당 시간에 들어온 작업이 있나 확인
         no_of_process_in_queue = refresh_queue(processes, job_queue, no_of_process_in_queue, current_time, no_of_process);
 
+        if(job_queue[which_process_to_run].deadline_time < current_time){
+            which_process_to_run = -1;
+            which_pid_to_run = -1;
+            shortest_deadline = 999999999; 
+        }
         // 큐 내부 모든 작업에 대해 Deadline이 더 빠른 작업이 있는지 확인
         for(int i=0; i<no_of_process_in_queue; i++){
             if(job_queue[i].process_id != -1 && (job_queue[i].deadline_time - current_time) < shortest_deadline && job_queue[i].deadline_time - current_time > 0 && job_queue[i].remained_time > 0){
