@@ -2,6 +2,8 @@ with open("output.txt", "r") as f:
     lines = f.readlines()
 execute_list = []
 for line in lines:
+    if not line.strip():
+        continue
     time, pid = line.strip().split(",")
     execute_list.append((int(time), int(pid)))
 
@@ -15,4 +17,4 @@ for time, pid in execute_list[1:]:
         last_pid = pid
 result.append((pid, start_time, time))
 for pid, start_time, time in result:
-    print(f"{pid},{start_time},{time}")
+    print(f"{pid},{start_time},{time-1}")
