@@ -32,8 +32,14 @@ void execute_scheduler(Process *processes, Queue_Node *job_queue, int no_of_proc
     int shortest_deadline = 999999999; // 제일 짧은 데드라인인지
     int remained_process = no_of_process;
     int max_deadline = calc_last_deadline(processes, no_of_process);
+
+    int start_time, last_pid, current_time;
+
+    TimeItem timeline[max_deadline];
+
     // 0부터 hyperperiod 까지 반복
-    for(int current_time=0; current_time<=hyperperiod; current_time++){
+    printf("\n======== 시간별 프로세스 1 ========\n");
+    for(current_time=0; current_time<=hyperperiod; current_time++){
         // 해당 시간에 들어온 작업이 있나 확인
         no_of_process_in_queue = refresh_queue(processes, job_queue, no_of_process_in_queue, current_time, no_of_process);
 
@@ -54,8 +60,13 @@ void execute_scheduler(Process *processes, Queue_Node *job_queue, int no_of_proc
 
         // 특정 시점에 대해 실행중인 프로세스에 대해 남은 시간 감소
         job_queue[which_process_to_run].remained_time--;
-        // printf("현재 시간:%d 실행프로세스:%d 큐 내부 작업:%d\n", current_time, which_pid_to_run, remained_process);
-        printf("%d, %d\n", current_time, which_pid_to_run);
+        if(which_pid_to_run == -1){
+            printf("현재 시간: %d, IDLE\n", current_time);
+        } else {
+            printf("현재 시간: %d, 실행중인 프로세스 ID: %d\n", current_time, which_pid_to_run);
+        }
+        timeline[current_time].time = current_time;
+        timeline[current_time].pid = which_pid_to_run;
         // 종료된 프로세스라면 CPU를 IDLE 상태로 변경
         if(job_queue[which_process_to_run].remained_time == 0){
             job_queue[which_process_to_run].process_id = -1;
@@ -69,12 +80,26 @@ void execute_scheduler(Process *processes, Queue_Node *job_queue, int no_of_proc
         }
     }
 
+    printf("\n======== 시간별 프로세스 2 ========\n");
+    start_time = timeline[0].time;
+    last_pid = timeline[0].pid;
+
+    for(int i=1; i<= current_time; i++){
+        if(last_pid != timeline[i].pid){
+            printf("PID: %d, 시작 시간: %d, 종료 시간: %d\n", last_pid, start_time, i-1);
+            start_time = i;
+            last_pid = timeline[i].pid;
+        }
+    }
+
+    printf("\n======== 완료되지 않은 프로세스 ========\n");
     // 스케줄러 종료 후 남은 프로세스 출력
     for(int i=0; i<no_of_process_in_queue; i++){
         if(job_queue[i].process_id != -1)
-            printf("PID:%d Remained:%d\n", job_queue[i].process_id, job_queue[i].remained_time);
+            printf("완료되지 않은 PID:%d 남은 시간:%d\n", job_queue[i].process_id, job_queue[i].remained_time);
     }
 }
+
 
 int main(){
     // txt 파일 읽는 부분

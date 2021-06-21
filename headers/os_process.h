@@ -24,6 +24,12 @@ typedef struct Queue_Node
     int deadline_time;  // 데드라인 (실시간)
 } Queue_Node;
 
+typedef struct TimeItem
+{
+    int time;   // 시간
+    int pid;  // PID
+} TimeItem;
+
 Process g_process[MAX_PROCESS];
 
 #endif
